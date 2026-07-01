@@ -2,6 +2,8 @@ package campaign
 
 import (
 	"emailn/internal/contract"
+	internalerrors "emailn/internal/internal-errors"
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -64,19 +66,12 @@ func Test_Create_SaveCampaign(t *testing.T) {
 }
 
 func Test_Create_ValidateRepositorySave(t *testing.T) {
+	assert := assert.New(t)
 	repositoryMock := new(repositoryMock)
-	repositoryMock.On("save", mock.MatchedBy(func(campaign *Campaign) bool {
-		if campaign.Name != newCampaign.Name ||
-			campaign.Content != newCampaign.Content ||
-			len(campaign.Contacts) != len(newCampaign.Emails) {
-			return false
-		}
-
-		return true
-	})).Return(nil)
+	repositoryMock.On("save", mock.Anything).Return(errors.New("error to save on database"))
 	service.Repository = repositoryMock
 
-	service.Create(newCampaign)
+	_, err := service.Create(newCampaign)
 
-	repositoryMock.AssertExpectations(t)
+	assert.True(errors.Is(internalerrors.ErrInternal, err))
 }
