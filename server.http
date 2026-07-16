@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:3000
+
+GET {{baseUrl}}?name=cassiano
+
+###
+GET {{baseUrl}}/teste
+
+###
+{{baseUrl}}/handler
+
+
