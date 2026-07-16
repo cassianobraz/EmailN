@@ -1,11 +1,14 @@
 @baseUrl = http://localhost:3000
 
-GET {{baseUrl}}?name=cassiano
+POST {{baseUrl}}/campaigns
+Content-Type: application/application/json
+
+{
+    "name": "mouse 2",
+    "content": "change password",
+    "emails": ["teste@test.com.br"]
+}
 
 ###
-GET {{baseUrl}}/teste
-
-###
-{{baseUrl}}/handler
-
+GET {{baseUrl}}/campaigns
 

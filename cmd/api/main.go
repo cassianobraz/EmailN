@@ -3,7 +3,12 @@ package main
 import (
 	"net/http"
 
+	"emailn/internal/domain/campaign"
+	"emailn/internal/endpoints"
+	"emailn/internal/infrastructure/database"
+
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 type myHandler struct{}
@@ -15,16 +20,20 @@ func (m myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func main() {
 	r := chi.NewRouter()
 
-	m := myHandler{}
-	r.Handle("/handler", m)
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		product := r.URL.Query().Get("product")
-		if product != "" {
-			w.Write([]byte(product))
-		} else {
-			w.Write([]byte("teste"))
-		}
-	})
+	r.Use(middleware.RequestID)
+	r.Use(middleware.ClientIPFromRemoteAddr)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
+	campaignService := campaign.Service{
+		Repository: &database.CampaignRepository{},
+	}
+	handler := endpoints.Handler{
+		CampaignService: campaignService,
+	}
+
+	r.Post("/campaigns", endpoints.HandlerError(handler.CampaignPost))
+	r.Get("/campaigns", endpoints.HandlerError(handler.CampaignGet))
 
 	http.ListenAndServe(":3000", r)
 }
