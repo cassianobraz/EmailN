@@ -10,5 +10,4 @@ Content-Type: application/application/json
 }
 
 ###
-GET {{baseUrl}}/campaigns
-
+GET {{baseUrl}}/campaigns/d9cs3hjoc4bgun4qnj30
