@@ -1,6 +1,6 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:3000/campaigns
 
-POST {{baseUrl}}/campaigns
+POST {{baseUrl}}
 Content-Type: application/application/json
 
 {
@@ -9,5 +9,5 @@ Content-Type: application/application/json
     "emails": ["teste@test.com.br"]
 }
 
-###
-GET {{baseUrl}}/campaigns/d9cs3hjoc4bgun4qnj30
+### GetByID
+GET {{baseUrl}}/{id}
