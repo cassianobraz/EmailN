@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"emailn/cmd/initializers"
 	"emailn/internal/domain/campaign"
 	"emailn/internal/endpoints"
 	"emailn/internal/infrastructure/database"
@@ -17,6 +18,10 @@ func (m myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("myHandler"))
 }
 
+func init() {
+	initializers.LoadEnvVariables()
+}
+
 func main() {
 	r := chi.NewRouter()
 
@@ -24,6 +29,7 @@ func main() {
 	r.Use(middleware.ClientIPFromRemoteAddr)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(endpoints.Auth)
 
 	db := database.NewDB()
 	campaignService := campaign.ServiceImp{
