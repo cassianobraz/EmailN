@@ -10,6 +10,8 @@ require (
 	github.com/stretchr/testify v1.11.1
 )
 
+require github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
+
 require (
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/coreos/go-oidc/v3 v3.20.0 // indirect

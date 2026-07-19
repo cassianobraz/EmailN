@@ -2,7 +2,7 @@
 @baseUrl = http://localhost:3000/campaigns
 
 POST {{baseUrl}}
-Authorization: Bearer {token}
+Authorization: Bearer {{access_token}}
 
 {
     "name": "mouse 2",
@@ -11,16 +11,23 @@ Authorization: Bearer {token}
 }
 
 ### GetByID
-GET {{baseUrl}}/d9dmv9le0ol75j7eika0l
+GET {{baseUrl}}/{token}
+Authorization: Bearer {{access_token}}
 
 ### Cancel
-PATCH {{baseUrl}}/cancel/d9dmv9le0ol75j7eika
+PATCH {{baseUrl}}/cancel/{token}
+Authorization: Bearer {{access_token}}
 
 ### Delete
-DELETE {{baseUrl}}/delete/d9dn0r5e0ol6ov13mctg
+DELETE {{baseUrl}}/delete/{token}
+Authorization: Bearer {{access_token}}
 
 ### Keycloak user login
-POST {{baseUrlKeyCloak}}/realms/provider/protocol/openid-connect/token
+# @name token
+POST {{baseUrlKeyCloak}}/realms/{provider}/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
-client_id=emailn&username=cassiano.braz&password=123456&grant_type=password
+client_id={client}&username={name}&password={password}&grant_type=password
+
+###
+@access_token = {{token.response.body.access_token}}
