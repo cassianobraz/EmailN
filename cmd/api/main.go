@@ -7,6 +7,7 @@ import (
 	"emailn/internal/domain/campaign"
 	"emailn/internal/endpoints"
 	"emailn/internal/infrastructure/database"
+	"emailn/internal/infrastructure/mail"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -33,6 +34,7 @@ func main() {
 	db := database.NewDB()
 	campaignService := campaign.ServiceImp{
 		Repository: &database.CampaignRepository{Db: db},
+		SendMail:   mail.SendMail,
 	}
 	handler := endpoints.Handler{
 		CampaignService: &campaignService,
@@ -42,8 +44,8 @@ func main() {
 		r.Use(endpoints.Auth)
 		r.Post("/", endpoints.HandlerError(handler.CampaignPost))
 		r.Get("/{id}", endpoints.HandlerError(handler.CampaignGetById))
-		r.Patch("/cancel/{id}", endpoints.HandlerError(handler.CampaignCancelPatch))
 		r.Delete("/delete/{id}", endpoints.HandlerError(handler.CampaignDelete))
+		r.Patch("/start/{id}", endpoints.HandlerError(handler.CampaignStart))
 	})
 
 	http.ListenAndServe(":3000", r)
